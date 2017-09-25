@@ -10,9 +10,17 @@ html {
 }
 
 body {
+    align-items:            center;
     background-color:       #f7f7f7;
+    display:                flex;
+    justify-content:        center;
     margin:                 auto;
     max-width:              500pt;
+    min-height:             100vh;
+}
+
+container {
+    max-height:     fit-content;
 }
 
 #main-container {
