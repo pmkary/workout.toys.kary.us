@@ -90,6 +90,7 @@ var Workout;
                 .map(symbol => `const ${symbol} = ${computedData[symbol]};`)
                 .join('\n');
             const funcString = (`(( ) => {
+                const { PI, E, abs, acos, acosh, asin, asinh, atan, atan2, atanh, cbrt, ceil, clz32, cos, cosh, exp, expm1, floor, fround, hypot, imul, log, log10, log1p, log2, max, min, pow, random, round } = Math;
                 ${functionDataAsConstants}
                 return ${input.formula};
             })( )`);
@@ -112,12 +113,61 @@ var Workout;
 })(Workout || (Workout = {}));
 var Workout;
 (function (Workout) {
+    var UI;
+    (function (UI) {
+        const localStorageId = 'us.kary.workout.code';
+        window.onload = () => {
+            checkAndLoadCodeInLocalStorage();
+            onInputChange();
+            const inputBox = document.getElementById('code-input');
+            inputBox.onchange = onInputChange;
+            inputBox.oninput = onInputChange;
+            inputBox.onkeyup = onInputChange;
+        };
+        function checkAndLoadCodeInLocalStorage() {
+            const code = localStorage.getItem(localStorageId);
+            if (code)
+                document.getElementById('code-input')
+                    .value = code;
+        }
+        function onInputChange() {
+            try {
+                const input = document.getElementById('code-input')
+                    .value;
+                const computedResults = Workout.compute(input);
+                renderLaTeX(computedResults.ast);
+                prettyPrintResults(computedResults.results);
+                localStorage.setItem(localStorageId, input);
+            }
+            catch (_a) {
+            }
+        }
+        UI.onInputChange = onInputChange;
+        function prettyPrintResults(results) {
+            document.getElementById('results').innerHTML =
+                Object.keys(results).map(key => results[key]
+                    ? `<b>${key}</b> &rightarrow; <b>${results[key]}</b>`
+                    : null)
+                    .join('<br/>');
+        }
+        function renderLaTeX(ast) {
+            const katexDisplay = document.getElementById('katex-display');
+            const compiledTeX = Workout.LaTeX.generateDiagram(ast);
+            console.log(compiledTeX);
+            katexDisplay.innerHTML =
+                katex.renderToString(compiledTeX, { displayMode: true });
+        }
+    })(UI = Workout.UI || (Workout.UI = {}));
+})(Workout || (Workout = {}));
+var Workout;
+(function (Workout) {
     var LaTeX;
     (function (LaTeX) {
         function generateDiagram(ast) {
-            const formulas = ast.map(x => generateLatexForFormula(x))
-                .join('\n\\\\\n');
-            return `\\begin{split}\n${formulas}\n\\end{split}`;
+            const formulas = ast.filter(x => x.dependencies.length > 0)
+                .map(x => generateLatexForFormula(x))
+                .join('\n\\\\[7pt]\n');
+            return `\\begin{aligned}\n${formulas}\n\\end{aligned}`;
         }
         LaTeX.generateDiagram = generateDiagram;
         function generateLatexForFormula(formula) {
@@ -128,23 +178,7 @@ var Workout;
                         .join('\\\\\n')
                     + '\\end{cases}')
                 : '');
-            const formulaCode = `\\overbrace{${formula.formula}}^{${formula.symbol}}`;
-            return `${formulaCode} & ${dependenciesCode} \n`;
+            return `${formula.symbol} & ${dependenciesCode}`;
         }
     })(LaTeX = Workout.LaTeX || (Workout.LaTeX = {}));
 })(Workout || (Workout = {}));
-var TestWorkspace;
-(function (TestWorkspace) {
-    window.onload = () => {
-        const code = (`
-                a = 2
-                y = x + 2
-                x = 3 * a
-                z = y + w
-            `);
-        const computed = Workout.compute(code);
-        const latexCode = Workout.LaTeX.generateDiagram(computed.ast);
-        console.log(latexCode);
-        console.log(computed);
-    };
-})(TestWorkspace || (TestWorkspace = {}));
