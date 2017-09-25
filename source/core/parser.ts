@@ -5,17 +5,25 @@
 //   to be used by anyone else in anyways.
 //
 
-/// <reference path="typings/jsep.d.ts" />
-
 
 namespace Workout.Parser {
+
+    //
+    // ─── INTERFACES ─────────────────────────────────────────────────────────────────
+    //
+
+        export interface IFormulaNode {
+            dependencies:   string[ ]
+            formula:        string
+            symbol:         string
+        }
 
     //
     // ─── PARSE ──────────────────────────────────────────────────────────────────────
     //
 
         /** parses the code into Workout AST */
-        export function parse ( code: string ) {
+        export function parse ( code: string ): IFormulaNode[ ] {
             // get lines
             const lines =
                 code.split('\n')
@@ -38,14 +46,29 @@ namespace Workout.Parser {
                 lines.map( line => {
                     const [ name, rule ] = line.split('=')
                     return {
-                        symbol:     name.trim( ),
-                        formula:    jsep( rule )
+                        dependencies:   fetchSymbols( rule ),
+                        formula:        rule.trim( ),
+                        symbol:         name.trim( ),
                     }
                 })
 
 
             // done
             return formulas
+        }
+
+    //
+    // ─── GET SYMBOLS ────────────────────────────────────────────────────────────────
+    //
+
+        function fetchSymbols ( rule: string ) {
+            // orchestras/symbols.orchestras
+            const matches = new Array<string>( )
+            rule.replace( /(?:\b((?:[a-z])+)\b)(?!(?:\s)*\()/g, match => {
+                matches.push( match )
+                return ''
+            })
+            return matches
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
