@@ -36,7 +36,7 @@ namespace Workout.LaTeX {
         function generateLatexForFormula ( formula: Formula ) {
             const dependenciesCode =
                 (( formula.dependencies.length > 0 )
-                    ?   ( '\\ \\begin{cases}'
+                    ?   ( '\\rightarrow \\begin{cases}'
                         + formula.dependencies
                             .map( x => `\\text{${ x }}` )
                             .join('\\\\\n')

@@ -104,7 +104,7 @@ namespace Workout.UI {
             const resultsInLaTeX =
                 Object.keys( results ).map( key =>
                     results[ key ]
-                        ? `${ key } &\\rightarrow ${ results[ key ]}`
+                        ? `${ key } & = ${ results[ key ]}`
                         : null )
                     .join('\n\\\\[5pt]\n')
 
