@@ -1,0 +1,77 @@
+
+//
+// Copyright 2017 by Pouya Kary. All Rights Reserved
+//   This code is property of Pouya Kary and is in no way granted
+//   to be used by anyone else in anyways.
+//
+
+/// <reference path="../parser.ts" />
+/// <reference path="octobass.ts" />
+
+
+namespace Workout.OctobassAdapter {
+
+    //
+    // ─── TYPES ──────────────────────────────────────────────────────────────────────
+    //
+
+        type OctobassFormat = Octobass.IInputDataFormat<string>[ ]
+        type OctobassComputedData = Octobass.IOctobassComputedDependencies<number>
+        type AST = Parser.IFormulaNode[ ]
+
+    //
+    // ─── COMPUTE ────────────────────────────────────────────────────────────────────
+    //
+
+        export function compute ( ast: AST ) {
+            const octobassData =
+                createOctobassData( ast )
+
+            const computedValue =
+                Octobass.exec( octobassData, octobassComputingFunction )
+
+            return computedValue
+        }
+
+    //
+    // ─── CREATE GRAPH ───────────────────────────────────────────────────────────────
+    //
+
+        function createOctobassData ( ast: AST ): OctobassFormat {
+            return ast.map( node => ({
+                info: {
+                    id: node.symbol,
+                    name: node.symbol,
+                },
+                dependencies: new Set( node.dependencies ),
+                formula: node.formula
+            }))
+        }
+
+    //
+    // ─── OCTOBASS COMPUTE FUNCTION ──────────────────────────────────────────────────
+    //
+
+        function octobassComputingFunction ( computedData: OctobassComputedData,
+                                                    input: Octobass.IInputDataFormat<string> ): number {
+
+            const functionDataAsConstants =
+                [ ...input.dependencies ]
+                    .map( symbol =>
+                        `const ${ symbol } = ${ computedData[ symbol ] };`)
+                    .join('\n')
+
+            const funcString = (`(( ) => {
+                ${ functionDataAsConstants }
+                return ${ input.formula };
+            })( )`)
+
+            const computedValue =
+                eval( funcString ) as number
+
+            return computedValue
+        }
+
+    // ────────────────────────────────────────────────────────────────────────────────
+
+}
