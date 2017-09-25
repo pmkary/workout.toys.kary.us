@@ -113,54 +113,6 @@ var Workout;
 })(Workout || (Workout = {}));
 var Workout;
 (function (Workout) {
-    var UI;
-    (function (UI) {
-        const localStorageId = 'us.kary.workout.code';
-        window.onload = () => {
-            checkAndLoadCodeInLocalStorage();
-            onInputChange();
-            const inputBox = document.getElementById('code-input');
-            inputBox.onchange = onInputChange;
-            inputBox.oninput = onInputChange;
-            inputBox.onkeyup = onInputChange;
-        };
-        function checkAndLoadCodeInLocalStorage() {
-            const code = localStorage.getItem(localStorageId);
-            if (code)
-                document.getElementById('code-input')
-                    .value = code;
-        }
-        function onInputChange() {
-            try {
-                const input = document.getElementById('code-input')
-                    .value;
-                const computedResults = Workout.compute(input);
-                renderLaTeX(computedResults.ast);
-                prettyPrintResults(computedResults.results);
-                localStorage.setItem(localStorageId, input);
-            }
-            catch (_a) {
-            }
-        }
-        UI.onInputChange = onInputChange;
-        function prettyPrintResults(results) {
-            document.getElementById('results').innerHTML =
-                Object.keys(results).map(key => results[key]
-                    ? `<b>${key}</b> &rightarrow; <b>${results[key]}</b>`
-                    : null)
-                    .join('<br/>');
-        }
-        function renderLaTeX(ast) {
-            const katexDisplay = document.getElementById('katex-display');
-            const compiledTeX = Workout.LaTeX.generateDiagram(ast);
-            console.log(compiledTeX);
-            katexDisplay.innerHTML =
-                katex.renderToString(compiledTeX, { displayMode: true });
-        }
-    })(UI = Workout.UI || (Workout.UI = {}));
-})(Workout || (Workout = {}));
-var Workout;
-(function (Workout) {
     var LaTeX;
     (function (LaTeX) {
         function generateDiagram(ast) {
@@ -181,4 +133,61 @@ var Workout;
             return `${formula.symbol} & ${dependenciesCode}`;
         }
     })(LaTeX = Workout.LaTeX || (Workout.LaTeX = {}));
+})(Workout || (Workout = {}));
+var Workout;
+(function (Workout) {
+    var UI;
+    (function (UI) {
+        const localStorageId = 'us.kary.workout.code';
+        window.onload = () => {
+            checkAndLoadCodeInLocalStorage();
+            onInputChange();
+            const inputBox = document.getElementById('code-input');
+            inputBox.onchange = onInputChange;
+            inputBox.oninput = onInputChange;
+            inputBox.onkeyup = onInputChange;
+        };
+        function checkAndLoadCodeInLocalStorage() {
+            const code = localStorage.getItem(localStorageId);
+            const input = document.getElementById('code-input');
+            if (code)
+                input.value = code;
+            else
+                input.value = (["a = 2",
+                    "y = x + 2",
+                    "x = 3 * a",
+                    "z = y + w"
+                ]
+                    .join('\n'));
+        }
+        function onInputChange() {
+            try {
+                const input = document.getElementById('code-input')
+                    .value;
+                const computedResults = Workout.compute(input);
+                renderDependencyLaTeX(computedResults.ast);
+                prettyPrintResults(computedResults.results);
+                localStorage.setItem(localStorageId, input);
+            }
+            catch (_a) {
+            }
+        }
+        function prettyPrintResults(results) {
+            const resultsInLaTeX = Object.keys(results).map(key => results[key]
+                ? `${key} &\\rightarrow ${results[key]}`
+                : null)
+                .join('\n\\\\[5pt]\n');
+            const fullLaTeX = `\\begin{aligned}\n${resultsInLaTeX}\n\\end{aligned}`;
+            renderLaTeX("results", fullLaTeX);
+        }
+        function renderDependencyLaTeX(ast) {
+            const compiledTeX = Workout.LaTeX.generateDiagram(ast);
+            renderLaTeX('katex-display', compiledTeX);
+        }
+        function renderLaTeX(id, code) {
+            const katexDisplay = document.getElementById(id);
+            katexDisplay.innerHTML =
+                katex.renderToString(code, { displayMode: true });
+        }
+    })(UI = Workout.UI || (Workout.UI = {}));
 })(Workout || (Workout = {}));

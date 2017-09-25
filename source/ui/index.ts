@@ -38,9 +38,9 @@ namespace Workout.UI {
             const inputBox =
                 document.getElementById('code-input')!
 
-            inputBox.onchange = onInputChange
-            inputBox.oninput = onInputChange
-            inputBox.onkeyup = onInputChange
+            inputBox.onchange   = onInputChange
+            inputBox.oninput    = onInputChange
+            inputBox.onkeyup    = onInputChange
         }
 
     //
@@ -50,16 +50,27 @@ namespace Workout.UI {
         function checkAndLoadCodeInLocalStorage ( ) {
             const code =
                 localStorage.getItem( localStorageId )
-            if ( code )
+            const input =
                 ( document.getElementById('code-input') as HTMLTextAreaElement )!
-                    .value = code
+
+            if ( code )
+                input.value = code
+            else
+                input.value = (
+                    [   "a = 2"
+                    ,   "y = x + 2"
+                    ,   "x = 3 * a"
+                    ,   "z = y + w"
+                    ]
+                    .join('\n')
+                )
         }
 
     //
     // ─── ON CHANGE ──────────────────────────────────────────────────────────────────
     //
 
-        export function onInputChange ( ) {
+        function onInputChange ( ) {
             try {
                 const input =
                     ( document.getElementById('code-input') as HTMLTextAreaElement )!
@@ -68,13 +79,13 @@ namespace Workout.UI {
                 const computedResults =
                     Workout.compute( input )
 
-                renderLaTeX( computedResults.ast )
+                renderDependencyLaTeX( computedResults.ast )
                 prettyPrintResults( computedResults.results )
 
                 localStorage.setItem( localStorageId, input )
 
             } catch {
-
+                // who cares...
             }
         }
 
@@ -83,28 +94,39 @@ namespace Workout.UI {
     //
 
         function prettyPrintResults ( results: Results ) {
-            document.getElementById('results')!.innerHTML =
+            const resultsInLaTeX =
                 Object.keys( results ).map( key =>
                     results[ key ]
-                        ? `<b>${ key }</b> &rightarrow; <b>${ results[ key ]}</b>`
+                        ? `${ key } &\\rightarrow ${ results[ key ]}`
                         : null )
-                    .join('<br/>')
+                    .join('\n\\\\[5pt]\n')
+
+            const fullLaTeX =
+                `\\begin{aligned}\n${ resultsInLaTeX }\n\\end{aligned}`
+
+            renderLaTeX( "results", fullLaTeX )
         }
 
     //
     // ─── RENDER LATEX ───────────────────────────────────────────────────────────────
     //
 
-        function renderLaTeX ( ast: AST ) {
-            const katexDisplay =
-                document.getElementById('katex-display')!
+        function renderDependencyLaTeX ( ast: AST ) {
             const compiledTeX =
                 Workout.LaTeX.generateDiagram( ast )
 
-            console.log( compiledTeX )
+            renderLaTeX( 'katex-display', compiledTeX )
+        }
 
+    //
+    // ─── RENDER LATEX ───────────────────────────────────────────────────────────────
+    //
+
+        function renderLaTeX ( id: string, code: string ) {
+            const katexDisplay =
+                document.getElementById( id )!
             katexDisplay.innerHTML =
-                katex.renderToString( compiledTeX, { displayMode: true } );
+                katex.renderToString( code, { displayMode: true } );
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

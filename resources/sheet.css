@@ -1,17 +1,13 @@
 
-:root {
-    --default-font:
-        hasklig, 'Courier New', Courier, monospace;
-}
-
 html {
-    font-family:    var( --default-font );
+    font-family:    Helvetica, Arial, sans-serif;
     font-size:      14pt;
+    line-height:    1.4;
 }
 
 body {
     align-items:            center;
-    background-color:       #f7f7f7;
+    background-color:       white;
     display:                flex;
     justify-content:        center;
     margin:                 auto;
@@ -28,10 +24,9 @@ container {
 }
 
 #katex-display {
-    flex:               auto;
-    max-width:          fit-content;
-    padding-right:      15pt;
-    padding-top:        5pt;
+    flex:           auto;
+    max-width:      fit-content;
+    padding-top:    5pt;
 }
 
 #results {
@@ -39,6 +34,7 @@ container {
     margin-right:       20pt;
     max-width:          fit-content;
     min-width:          fit-content;
+    padding-top:        5pt;
 }
 
 .katex {
@@ -46,18 +42,18 @@ container {
 }
 
 .box {
-    background:         #eee;
+    background:         #f7f7f7;
     border:             none;
     border-radius:      4pt;
+    min-width:          50pt;
     padding:            20pt;
 }
 
 textarea {
-    flex:               auto;
-    font-family:        var( --default-font );
-    font-size:          1rem;
-    margin-right:       20pt;
-    resize:             none;
+    flex:           auto;
+    font-family:    Hasklig, monospace;
+    font-size:      1rem;
+    resize:         none;
 }
 
 #hit-box {
@@ -72,4 +68,11 @@ textarea {
     font-size:          0.7rem;
     margin-bottom:      100pt;
     margin-top:         50pt;
+}
+
+#input-container {
+    align-items:        stretch;
+    display:            flex;
+    flex-direction:     column;
+    margin-right:       20pt;
 }
