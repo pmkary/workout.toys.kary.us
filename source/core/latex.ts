@@ -22,10 +22,11 @@ namespace Workout.LaTeX {
 
         export function generateDiagram ( ast: AST ) {
             const formulas =
-                ast .map( x => generateLatexForFormula( x ) )
-                    .join('\n\\\\\n')
+                ast .filter( x => x.dependencies.length > 0 )
+                    .map( x => generateLatexForFormula( x ) )
+                    .join('\n\\\\[7pt]\n')
 
-            return `\\begin{split}\n${ formulas }\n\\end{split}`
+            return `\\begin{aligned}\n${ formulas }\n\\end{aligned}`
         }
 
     //
@@ -43,11 +44,7 @@ namespace Workout.LaTeX {
                         )
                     : '')
 
-
-            const formulaCode =
-                `\\overbrace{${ formula.formula }}^{${ formula.symbol }}`
-
-            return `${ formulaCode } & ${ dependenciesCode } \n`
+            return `${ formula.symbol } & ${ dependenciesCode }`
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
