@@ -13,6 +13,7 @@ body {
     margin:                 auto;
     max-width:              500pt;
     min-height:             100vh;
+    overflow-y:             hidden;
 }
 
 container {
@@ -20,7 +21,8 @@ container {
 }
 
 #main-container {
-    display:    flex;
+    align-items:    stretch;
+    display:        flex;
 }
 
 #katex-display {
@@ -75,4 +77,44 @@ textarea {
     display:            flex;
     flex-direction:     column;
     margin-right:       20pt;
+}
+
+#monitor-view {
+    display:        flex;
+    max-width:      fit-content;
+}
+
+@media ( max-width: 700px ) {
+    body {
+        margin:         20pt !important;
+        max-width:      calc( 100vw - 40pt ) !important;
+        min-height:     max-content;
+    }
+
+    #main-container {
+        align-items:        stretch;
+        flex-direction:     column;
+    }
+
+    #input-container {
+        margin:     0;
+    }
+
+    #monitor-view {
+        margin-top:     20pt;
+    }
+
+    #katex-display, #results {
+        --monitor-nodes-max-width:
+            calc( 50vw - 70pt );
+
+        flex:           1;
+        max-width:      var(--monitor-nodes-max-width);
+        min-height:     200pt;
+        min-width:      var(--monitor-nodes-max-width);
+    }
+
+    #hit-box {
+        display:    none;
+    }
 }

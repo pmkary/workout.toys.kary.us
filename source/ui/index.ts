@@ -48,14 +48,9 @@ namespace Workout.UI {
     //
 
         function checkAndLoadCodeInLocalStorage ( ) {
-            const code =
-                localStorage.getItem( localStorageId )
             const input =
                 ( document.getElementById('code-input') as HTMLTextAreaElement )!
-
-            if ( code )
-                input.value = code
-            else
+            const defaultCode =
                 input.value = (
                     [   "a = 2"
                     ,   "y = x + 2"
@@ -64,6 +59,18 @@ namespace Workout.UI {
                     ]
                     .join('\n')
                 )
+
+            try {
+                const code =
+                    localStorage.getItem( localStorageId )
+
+                if ( code )
+                    input.value = code
+                else
+                    input.value = defaultCode
+            } catch {
+                input.value = defaultCode
+            }
         }
 
     //

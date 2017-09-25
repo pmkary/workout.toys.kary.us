@@ -148,17 +148,23 @@ var Workout;
             inputBox.onkeyup = onInputChange;
         };
         function checkAndLoadCodeInLocalStorage() {
-            const code = localStorage.getItem(localStorageId);
             const input = document.getElementById('code-input');
-            if (code)
-                input.value = code;
-            else
-                input.value = (["a = 2",
-                    "y = x + 2",
-                    "x = 3 * a",
-                    "z = y + w"
-                ]
-                    .join('\n'));
+            const defaultCode = input.value = (["a = 2",
+                "y = x + 2",
+                "x = 3 * a",
+                "z = y + w"
+            ]
+                .join('\n'));
+            try {
+                const code = localStorage.getItem(localStorageId);
+                if (code)
+                    input.value = code;
+                else
+                    input.value = defaultCode;
+            }
+            catch (_a) {
+                input.value = defaultCode;
+            }
         }
         function onInputChange() {
             try {
