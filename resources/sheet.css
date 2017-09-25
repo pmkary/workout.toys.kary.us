@@ -40,7 +40,7 @@ container {
 }
 
 .katex {
-    font-size:      1.1em;
+    font-size:      1.1rem;
 }
 
 .box {
@@ -116,5 +116,9 @@ textarea {
 
     #hit-box {
         display:    none;
+    }
+
+    .katex {
+        font-size:      0.7rem;
     }
 }
