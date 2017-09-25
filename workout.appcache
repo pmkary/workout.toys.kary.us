@@ -1,0 +1,17 @@
+CACHE MANIFEST
+
+# Offline cache v1
+# html files
+index.html
+
+# resources
+resources/sheet.css
+resources/katex.min.js
+resources/katex.min.css
+resources/fonts/KaTeX_Main-Regular.woff2
+resources/fonts/KaTeX_Math-Italic.woff2
+resources/fonts/KaTeX_Size2-Regular.woff2
+resources/fonts/KaTeX_Size4-Regular.woff2
+
+# js files
+bin/core.js
