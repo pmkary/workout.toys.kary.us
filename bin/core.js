@@ -124,7 +124,7 @@ var Workout;
         LaTeX.generateDiagram = generateDiagram;
         function generateLatexForFormula(formula) {
             const dependenciesCode = ((formula.dependencies.length > 0)
-                ? ('\\ \\begin{cases}'
+                ? ('\\rightarrow \\begin{cases}'
                     + formula.dependencies
                         .map(x => `\\text{${x}}`)
                         .join('\\\\\n')
@@ -180,7 +180,7 @@ var Workout;
         }
         function prettyPrintResults(results) {
             const resultsInLaTeX = Object.keys(results).map(key => results[key]
-                ? `${key} &\\rightarrow ${results[key]}`
+                ? `${key} & = ${results[key]}`
                 : null)
                 .join('\n\\\\[5pt]\n');
             const fullLaTeX = `\\begin{aligned}\n${resultsInLaTeX}\n\\end{aligned}`;
