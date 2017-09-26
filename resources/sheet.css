@@ -85,12 +85,12 @@ textarea {
 }
 
 #tab-bar {
-    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
     height:                 fit-content;
+    display:                flex;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    display:                flex;
+    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
@@ -126,6 +126,10 @@ textarea {
     display:    none !important;
 }
 
+.hint-values {
+    color:      #6E6E6E;
+}
+
 @media ( max-width: 700px ) {
     body {
         justify-content:    flex-start;
@@ -159,13 +163,9 @@ textarea {
         min-width:      var(--monitor-nodes-max-width);
     }
 
-    #hit-box {
-        display:    none;
-    }
-
     #code-input {
         flex:           1;
-        height:         calc( 100vh - 200pt );
+        height:         calc( 100vh - 230pt - 70px );
         min-width:      calc( 100vw - 80pt );
     }
 

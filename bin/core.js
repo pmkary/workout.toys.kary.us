@@ -141,7 +141,6 @@ var Workout;
         const localStorageId = 'us.kary.workout.code';
         window.onload = () => {
             checkAndLoadCodeInLocalStorage();
-            document.ontouchmove = e => e.preventDefault();
             setupInputBoxEvents();
             setupTabBarEvents();
             setupWindowResizeEvent();
@@ -243,19 +242,17 @@ var Workout;
             const resultsView = getClassList('monitor-view');
             const editorTabButton = getClassList('editor-tab-button');
             const resultsTabButton = getClassList('results-tab-button');
+            editorView.remove('hidden');
+            resultsTabButton.remove('active');
             if (screen.width > 500) {
                 tabBar.add('hidden');
                 resultsView.remove('hidden');
-                editorView.remove('hidden');
                 editorTabButton.remove('active');
-                resultsTabButton.remove('active');
             }
             else {
                 tabBar.remove('hidden');
                 resultsView.add('hidden');
-                editorView.remove('hidden');
                 editorTabButton.add('active');
-                resultsTabButton.remove('active');
             }
         }
     })(UI = Workout.UI || (Workout.UI = {}));

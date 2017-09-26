@@ -34,7 +34,7 @@ namespace Workout.UI {
         window.onload = ( ) => {
             // loading
             checkAndLoadCodeInLocalStorage( )
-            document.ontouchmove = e => e.preventDefault( )
+            // document.body.ontouchmove = e => e.preventDefault( )
 
             // event setups
             setupInputBoxEvents( )
@@ -240,18 +240,17 @@ namespace Workout.UI {
             const resultsTabButton =
                 getClassList('results-tab-button')
 
+            editorView.remove('hidden')
+            resultsTabButton.remove('active')
+
             if ( screen.width > 500 ) {
                 tabBar.add('hidden')
                 resultsView.remove('hidden')
-                editorView.remove('hidden')
                 editorTabButton.remove('active')
-                resultsTabButton.remove('active')
             } else {
                 tabBar.remove('hidden')
                 resultsView.add('hidden')
-                editorView.remove('hidden')
                 editorTabButton.add('active')
-                resultsTabButton.remove('active')
             }
         }
 
