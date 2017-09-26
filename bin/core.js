@@ -157,6 +157,7 @@ var Workout;
         const localStorageId = 'us.kary.workout.code';
         window.onload = () => {
             checkAndLoadCodeInLocalStorage();
+            document.body.ontouchmove = e => e.preventDefault();
             setupInputBoxEvents();
             setupTabBarEvents();
             setupWindowResizeEvent();

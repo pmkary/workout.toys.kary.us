@@ -34,7 +34,7 @@ namespace Workout.UI {
         window.onload = ( ) => {
             // loading
             checkAndLoadCodeInLocalStorage( )
-            // document.body.ontouchmove = e => e.preventDefault( )
+            document.body.ontouchmove = e => e.preventDefault( )
 
             // event setups
             setupInputBoxEvents( )
