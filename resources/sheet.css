@@ -15,10 +15,6 @@ body {
     overflow-y:             hidden;
 }
 
-body, html {
-    position:       fixed;
-}
-
 container {
     max-height:     fit-content;
 }
@@ -89,12 +85,12 @@ textarea {
 }
 
 #tab-bar {
-    display:                flex;
     border-top:             1px rgba( 0, 0, 0, 0.1) solid;
+    height:                 fit-content;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    height:                 fit-content;
+    display:                flex;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
@@ -138,6 +134,10 @@ textarea {
         max-width:          calc( 100vw - 40pt ) !important;
         min-height:         100vh;
         overflow:           hidden;
+    }
+
+    body, html {
+        position:       fixed;
     }
 
     #main-container {
