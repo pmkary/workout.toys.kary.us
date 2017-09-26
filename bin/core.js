@@ -212,7 +212,7 @@ var Workout;
         }
         function prettyPrintResults(results) {
             const resultsInLaTeX = Object.keys(results).map(key => results[key]
-                ? `\\text{${key}} & = ${results[key]}`
+                ? `\\ ${key} & = ${results[key]}`
                 : null)
                 .join('\n\\\\[5pt]\n');
             const fullLaTeX = `\\begin{aligned}\n${resultsInLaTeX}\n\\end{aligned}`;
