@@ -43,12 +43,10 @@ namespace Octobass {
         export function exec <T, K> ( data: TExecData<T>,
                                       func: IExecutionFunction<T, K> ): TExecOutput<K> {
 
-            // data
             const computedData: IOctobassComputedDependencies<K> = { }
             let countDownCounter = data.length
             let lastCountDownCounterBackup = Infinity
 
-            // body
             while ( countDownCounter > 0 ) {
                 lastCountDownCounterBackup = countDownCounter
 
@@ -60,7 +58,6 @@ namespace Octobass {
                     return computedData
             }
 
-            // done
             return computedData
         }
 
@@ -73,11 +70,9 @@ namespace Octobass {
                                 countDownCounter: number,
                                             func: IExecutionFunction<T, K>) {
 
-            // check if the dependencies are okay
             if ( !isComputable( inputData, computedData ) )
                 return countDownCounter
 
-            // lets compute
             computedData[ inputData.info.id ] =
                 func( computedData, inputData )
 
@@ -88,8 +83,8 @@ namespace Octobass {
     // ─── CHECK IF DEPENDENCIES MEET ─────────────────────────────────────────────────
     //
 
-        function isComputable<T, K> ( inputData: IInputDataFormat<T>,
-                                   computedData: IOctobassComputedDependencies<K> ) {
+        function isComputable <T, K> ( inputData: IInputDataFormat<T>,
+                                    computedData: IOctobassComputedDependencies<K> ) {
 
             for ( const id of inputData.dependencies )
                 if ( computedData[ id ] === undefined )
