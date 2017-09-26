@@ -141,12 +141,28 @@ var Workout;
         const localStorageId = 'us.kary.workout.code';
         window.onload = () => {
             checkAndLoadCodeInLocalStorage();
+            document.ontouchmove = e => e.preventDefault();
+            setupInputBoxEvents();
+            setupTabBarEvents();
+            setupWindowResizeEvent();
             onInputChange();
+            configureWindowBasedOnScreenWidth();
+        };
+        function setupInputBoxEvents() {
             const inputBox = document.getElementById('code-input');
             inputBox.onchange = onInputChange;
             inputBox.oninput = onInputChange;
             inputBox.onkeyup = onInputChange;
-        };
+        }
+        function setupWindowResizeEvent() {
+            window.onresize = () => configureWindowBasedOnScreenWidth();
+        }
+        function setupTabBarEvents() {
+            document.getElementById('editor-tab-button')
+                .onclick = () => changeTab('input-container');
+            document.getElementById('results-tab-button')
+                .onclick = () => changeTab('monitor-view');
+        }
         function checkAndLoadCodeInLocalStorage() {
             const input = document.getElementById('code-input');
             const defaultCode = input.value = (["a = 2",
@@ -196,11 +212,51 @@ var Workout;
                 katex.renderToString(code, { displayMode: true });
         }
         function changeTab(toBeActiveTabId) {
-            const toBeDeActivatedTabId = ((toBeActiveTabId === "toBeActiveTabId")
-                ? "toBeActiveTabId" : "monitor-view");
-            document.getElementById(toBeActiveTabId).hidden = false;
-            document.getElementById(toBeDeActivatedTabId).hidden = true;
+            changeTabView(toBeActiveTabId);
+            changeTabButtons(toBeActiveTabId);
         }
-        UI.changeTab = changeTab;
+        function changeTabView(toBeActiveTabId) {
+            const toBeDeActivatedTabId = ((toBeActiveTabId === "input-container")
+                ? "monitor-view"
+                : "input-container");
+            document.getElementById(toBeActiveTabId)
+                .classList.remove('hidden');
+            document.getElementById(toBeDeActivatedTabId)
+                .classList.add('hidden');
+        }
+        function changeTabButtons(toBeActiveTabId) {
+            const toBeActivatedTabButtonId = ((toBeActiveTabId === "input-container")
+                ? "editor-tab-button"
+                : "results-tab-button");
+            const toBeDeActivatedTabButtonId = ((toBeActiveTabId === "input-container")
+                ? "results-tab-button"
+                : "editor-tab-button");
+            document.getElementById(toBeActivatedTabButtonId)
+                .classList.add('active');
+            document.getElementById(toBeDeActivatedTabButtonId)
+                .classList.remove('active');
+        }
+        function configureWindowBasedOnScreenWidth() {
+            const getClassList = (id) => document.getElementById(id).classList;
+            const tabBar = getClassList('tab-bar');
+            const editorView = getClassList('input-container');
+            const resultsView = getClassList('monitor-view');
+            const editorTabButton = getClassList('editor-tab-button');
+            const resultsTabButton = getClassList('results-tab-button');
+            if (screen.width > 500) {
+                tabBar.add('hidden');
+                resultsView.remove('hidden');
+                editorView.remove('hidden');
+                editorTabButton.remove('active');
+                resultsTabButton.remove('active');
+            }
+            else {
+                tabBar.remove('hidden');
+                resultsView.add('hidden');
+                editorView.remove('hidden');
+                editorTabButton.add('active');
+                resultsTabButton.remove('active');
+            }
+        }
     })(UI = Workout.UI || (Workout.UI = {}));
 })(Workout || (Workout = {}));

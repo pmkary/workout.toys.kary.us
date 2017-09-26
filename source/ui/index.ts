@@ -32,15 +32,52 @@ namespace Workout.UI {
     //
 
         window.onload = ( ) => {
+            // loading
             checkAndLoadCodeInLocalStorage( )
-            onInputChange( )
+            document.ontouchmove = e => e.preventDefault( )
 
+            // event setups
+            setupInputBoxEvents( )
+            setupTabBarEvents( )
+            setupWindowResizeEvent( )
+
+            // do first render stuff
+            onInputChange( )
+            configureWindowBasedOnScreenWidth( )
+        }
+
+    //
+    // ─── SET EVENTS FOR INPUT BOX ───────────────────────────────────────────────────
+    //
+
+        function setupInputBoxEvents ( ) {
             const inputBox =
                 document.getElementById('code-input')!
 
             inputBox.onchange   = onInputChange
             inputBox.oninput    = onInputChange
             inputBox.onkeyup    = onInputChange
+        }
+
+    //
+    // ─── SETUP WINDOW RESIZE EVENT ──────────────────────────────────────────────────
+    //
+
+        function setupWindowResizeEvent ( ) {
+            window.onresize = ( ) =>
+                 configureWindowBasedOnScreenWidth( )
+        }
+
+    //
+    // ─── SETUP TAB BAR EVENTS ───────────────────────────────────────────────────────
+    //
+
+        function setupTabBarEvents ( ) {
+            document.getElementById('editor-tab-button')!
+                .onclick = ( ) => changeTab('input-container')
+
+            document.getElementById('results-tab-button')!
+                .onclick = ( ) => changeTab('monitor-view')
         }
 
     //
@@ -134,6 +171,88 @@ namespace Workout.UI {
                 document.getElementById( id )!
             katexDisplay.innerHTML =
                 katex.renderToString( code, { displayMode: true } );
+        }
+
+    //
+    // ─── CHANGE TABS ────────────────────────────────────────────────────────────────
+    //
+
+        function changeTab ( toBeActiveTabId: string ) {
+            changeTabView( toBeActiveTabId )
+            changeTabButtons( toBeActiveTabId )
+        }
+
+    //
+    // ─── CHANGE TAB VIEW ────────────────────────────────────────────────────────────
+    //
+
+        function changeTabView ( toBeActiveTabId: string ) {
+            const toBeDeActivatedTabId =
+                (( toBeActiveTabId === "input-container" )
+                    ? "monitor-view"
+                    : "input-container"
+                    )
+
+            document.getElementById( toBeActiveTabId )!
+                .classList.remove('hidden')
+            document.getElementById( toBeDeActivatedTabId )!
+                .classList.add('hidden')
+        }
+
+    //
+    // ─── CHANGE TAB BUTTONS ─────────────────────────────────────────────────────────
+    //
+
+        function changeTabButtons ( toBeActiveTabId: string ) {
+            const toBeActivatedTabButtonId =
+                (( toBeActiveTabId === "input-container" )
+                    ? "editor-tab-button"
+                    : "results-tab-button"
+                    )
+            const toBeDeActivatedTabButtonId =
+                (( toBeActiveTabId === "input-container" )
+                    ? "results-tab-button"
+                    : "editor-tab-button"
+                    )
+
+            document.getElementById( toBeActivatedTabButtonId )!
+                .classList.add('active')
+            document.getElementById( toBeDeActivatedTabButtonId )!
+                .classList.remove('active')
+        }
+
+    //
+    // ─── CONFIGURE WINDOW BASED ON WIDTH ────────────────────────────────────────────
+    //
+
+        function configureWindowBasedOnScreenWidth ( ) {
+            const getClassList = ( id: string ) =>
+                document.getElementById( id )!.classList
+
+            const tabBar =
+                getClassList('tab-bar')
+            const editorView =
+                getClassList('input-container')
+            const resultsView =
+                getClassList('monitor-view')
+            const editorTabButton =
+                getClassList('editor-tab-button')
+            const resultsTabButton =
+                getClassList('results-tab-button')
+
+            if ( screen.width > 500 ) {
+                tabBar.add('hidden')
+                resultsView.remove('hidden')
+                editorView.remove('hidden')
+                editorTabButton.remove('active')
+                resultsTabButton.remove('active')
+            } else {
+                tabBar.remove('hidden')
+                resultsView.add('hidden')
+                editorView.remove('hidden')
+                editorTabButton.add('active')
+                resultsTabButton.remove('active')
+            }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

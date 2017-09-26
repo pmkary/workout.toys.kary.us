@@ -8,12 +8,15 @@ html {
 body {
     align-items:            center;
     background-color:       white;
-    display:                flex;
     justify-content:        center;
     margin:                 auto;
     max-width:              500pt;
     min-height:             100vh;
     overflow-y:             hidden;
+}
+
+body, html {
+    position:       fixed;
 }
 
 container {
@@ -26,9 +29,10 @@ container {
 }
 
 #katex-display {
-    flex:           auto;
-    max-width:      fit-content;
-    padding-top:    5pt;
+    flex:               auto;
+    max-width:          fit-content;
+    padding-bottom:     5pt;
+    padding-top:        5pt;
 }
 
 #results {
@@ -85,12 +89,12 @@ textarea {
 }
 
 #tab-bar {
-    height:                 fit-content;
     display:                flex;
+    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
+    height:                 fit-content;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
@@ -122,11 +126,18 @@ textarea {
     margin-top:     4pt;
 }
 
+.hidden {
+    display:    none !important;
+}
+
 @media ( max-width: 700px ) {
     body {
-        margin:         20pt !important;
-        max-width:      calc( 100vw - 40pt ) !important;
-        min-height:     max-content;
+        justify-content:    flex-start;
+        margin:             20pt !important;
+        max-height:         100vh;
+        max-width:          calc( 100vw - 40pt ) !important;
+        min-height:         100vh;
+        overflow:           hidden;
     }
 
     #main-container {
@@ -138,22 +149,24 @@ textarea {
         margin:     0;
     }
 
-    #monitor-view {
-        margin-top:     20pt;
-    }
-
     #katex-display, #results {
         --monitor-nodes-max-width:
             calc( 50vw - 70pt );
 
         flex:           1;
         max-width:      var(--monitor-nodes-max-width);
-        min-height:     200pt;
+        min-height:     none;
         min-width:      var(--monitor-nodes-max-width);
     }
 
     #hit-box {
         display:    none;
+    }
+
+    #code-input {
+        flex:           1;
+        height:         calc( 100vh - 200pt );
+        min-width:      calc( 100vw - 80pt );
     }
 
     .katex {
