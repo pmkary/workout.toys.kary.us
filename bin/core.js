@@ -195,5 +195,12 @@ var Workout;
             katexDisplay.innerHTML =
                 katex.renderToString(code, { displayMode: true });
         }
+        function changeTab(toBeActiveTabId) {
+            const toBeDeActivatedTabId = ((toBeActiveTabId === "toBeActiveTabId")
+                ? "toBeActiveTabId" : "monitor-view");
+            document.getElementById(toBeActiveTabId).hidden = false;
+            document.getElementById(toBeDeActivatedTabId).hidden = true;
+        }
+        UI.changeTab = changeTab;
     })(UI = Workout.UI || (Workout.UI = {}));
 })(Workout || (Workout = {}));

@@ -84,6 +84,44 @@ textarea {
     max-width:      fit-content;
 }
 
+#tab-bar {
+    height:                 fit-content;
+    display:                flex;
+    background-color:       rgba( 255, 255, 255, 0.95);
+    bottom:                 0;
+    box-sizing:             border-box;
+    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
+    justify-content:        space-around;
+    left:                   0;
+    position:               fixed;
+    right:                  0;
+    width:                  100vw;
+}
+
+.tab {
+    color:              #919191;
+    margin-bottom:      3pt;
+    margin-top:         3px;
+    max-width:          fit-content;
+    text-align:         center;
+    width:              fit-content;
+}
+
+.tab.active {
+    color:      #007AFE;
+}
+
+.tab-icon {
+    font-family:    "Flaticon";
+    font-size:      25px;
+    height:         25px;
+}
+
+.tab-caption {
+    font-size:      8pt;
+    margin-top:     4pt;
+}
+
 @media ( max-width: 700px ) {
     body {
         margin:         20pt !important;
