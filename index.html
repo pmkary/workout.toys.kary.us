@@ -20,7 +20,7 @@
 
     <link rel="apple-touch-icon" href="resources/apple-touch-icon-precomposed.png">
 
-    <link rel="shortcut icon" type="image/png" href="/resources/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="resources/favicon.png"/>
 </head>
 <body>
     <container>
@@ -28,6 +28,7 @@
 
         <div id="main-container">
             <div id="input-container">
+                <tool-title>Equations</tool-title>
                 <textarea id="code-input" class="box" rows="10"></textarea>
                 <div id="hit-box">
                     Available Functions: <span class="hint-values">abs, acos, acosh,
@@ -39,8 +40,14 @@
             </div>
 
             <div id="monitor-view">
-                <div id="results" class="box"></div>
-                <div id="katex-display" class="box"></div>
+                <div>
+                    <tool-title>Results</tool-title>
+                    <div id="results" class="box"></div>
+                </div>
+                <div>
+                    <tool-title>Dependencies</tool-title>
+                    <div id="katex-display" class="box"></div>
+                </div>
             </div>
         </div>
     </container>

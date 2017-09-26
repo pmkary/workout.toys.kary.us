@@ -84,13 +84,19 @@ textarea {
     max-width:      fit-content;
 }
 
+#monitor-view > div {
+    align-items:        stretch;
+    display:            flex;
+    flex-direction:     column;
+}
+
 #tab-bar {
+    display:                flex;
     border-top:             1px rgba( 0, 0, 0, 0.1) solid;
-    height:                 fit-content;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    display:                flex;
+    height:                 fit-content;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
@@ -128,6 +134,15 @@ textarea {
 
 .hint-values {
     color:      #6E6E6E;
+}
+
+tool-title {
+    color:              #aaa;
+    font-size:          8pt;
+    letter-spacing:     3pt;
+    margin-bottom:      4pt;
+    margin-left:        5pt;
+    text-transform:     uppercase;
 }
 
 @media ( max-width: 700px ) {
