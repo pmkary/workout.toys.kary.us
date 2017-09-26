@@ -9,9 +9,15 @@ var Workout;
             for (const line of lines) {
                 const splinted = line.split('=');
                 if (splinted.length !== 2)
-                    throw { line: line, message: "Has more than one definition sign" };
-                if (!/^[a-z]$/.test(splinted[0].trim()))
-                    throw { line: line, message: "Bad formula symbol" };
+                    throw {
+                        line: line,
+                        message: "Has more than one definition sign"
+                    };
+                if (!/^[a-z]+$/.test(splinted[0].trim()))
+                    throw {
+                        line: line,
+                        message: "Bad formula symbol"
+                    };
             }
             const formulas = lines.map(line => {
                 const [name, rule] = line.split('=');
@@ -25,11 +31,15 @@ var Workout;
         }
         Parser.parse = parse;
         function fetchSymbols(rule) {
+            const regX = /(?:\b([a-z]+)\b)(?!\s*\()/g;
             const matches = new Array();
-            rule.replace(/(?:\b((?:[a-z])+)\b)(?!(?:\s)*\()/g, match => {
-                matches.push(match);
-                return '';
-            });
+            let match = undefined;
+            do {
+                match = regX.exec(rule);
+                if (match) {
+                    matches.push(match[1]);
+                }
+            } while (match);
             return matches;
         }
     })(Parser = Workout.Parser || (Workout.Parser = {}));
@@ -90,8 +100,14 @@ var Workout;
                 .map(symbol => `const ${symbol} = ${computedData[symbol]};`)
                 .join('\n');
             const funcString = (`(( ) => {
-                const { PI, E, abs, acos, acosh, asin, asinh, atan, atan2, atanh, cbrt, ceil, clz32, cos, cosh, exp, expm1, floor, fround, hypot, imul, log, log10, log1p, log2, max, min, pow, random, round } = Math;
+                const {
+                    PI, E, abs, acos, acosh, asin, asinh, atan, atan2, atanh,
+                    cbrt, ceil, clz32, cos, cosh, exp, expm1, floor, fround, hypot,
+                    imul, log, log10, log1p, log2, max, min, pow, random, round
+                } = Math;
+
                 ${functionDataAsConstants}
+
                 return ${input.formula};
             })( )`);
             const computedValue = eval(funcString);
@@ -195,7 +211,7 @@ var Workout;
         }
         function prettyPrintResults(results) {
             const resultsInLaTeX = Object.keys(results).map(key => results[key]
-                ? `${key} & = ${results[key]}`
+                ? `\\text{${key}} & = ${results[key]}`
                 : null)
                 .join('\n\\\\[5pt]\n');
             const fullLaTeX = `\\begin{aligned}\n${resultsInLaTeX}\n\\end{aligned}`;
