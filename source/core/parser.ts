@@ -24,24 +24,27 @@ namespace Workout.Parser {
 
         /** parses the code into Workout AST */
         export function parse ( code: string ): IFormulaNode[ ] {
-            // get lines
             const lines =
-                code.split('\n')
+                code.split( '\n' )
                     .filter( line => !/^\s*$/.test( line ) )
 
-
-            // check if lines are okay
             for ( const line of lines ) {
-                const splinted = line.split('=')
-                if ( splinted.length !== 2 )
-                    throw { line: line, message: "Has more than one definition sign" }
+                const splinted =
+                    line.split( '=' )
 
-                if ( !/^[a-z]$/.test( splinted[ 0 ].trim( ) ) )
-                    throw { line: line, message: "Bad formula symbol" }
+                if ( splinted.length !== 2 )
+                    throw {
+                        line: line,
+                        message: "Has more than one definition sign"
+                    }
+
+                if ( !/^[a-z]+$/.test( splinted[ 0 ].trim( ) ) )
+                    throw {
+                        line: line,
+                        message: "Bad formula symbol"
+                    }
             }
 
-
-            // compiling formulas
             const formulas =
                 lines.map( line => {
                     const [ name, rule ] = line.split('=')
@@ -52,8 +55,6 @@ namespace Workout.Parser {
                     }
                 })
 
-
-            // done
             return formulas
         }
 
@@ -62,12 +63,21 @@ namespace Workout.Parser {
     //
 
         function fetchSymbols ( rule: string ) {
-            // orchestras/symbols.orchestras
-            const matches = new Array<string>( )
-            rule.replace( /(?:\b((?:[a-z])+)\b)(?!(?:\s)*\()/g, match => {
-                matches.push( match )
-                return ''
-            })
+            const regX =
+                /(?:\b([a-z]+)\b)(?!\s*\()/g
+            const matches =
+                new Array<string>( )
+            let match =
+                undefined
+
+            do {
+                match = regX.exec( rule )
+                if ( match ) {
+                    matches.push( match[ 1 ] )
+                }
+
+            } while ( match )
+
             return matches
         }
 
