@@ -42,7 +42,8 @@ namespace Workout.LaTeX {
                             .join('\\\\\n')
                         + '\\end{cases}'
                         )
-                    : '')
+                    :   ''
+                    )
 
             return `${ formula.symbol } & ${ dependenciesCode }`
         }
