@@ -206,6 +206,7 @@ var Workout;
                 const computedResults = Workout.compute(input);
                 renderDependencyLaTeX(computedResults.ast);
                 prettyPrintResults(computedResults.results);
+                createDependencyGraph(computedResults.ast);
                 localStorage.setItem(localStorageId, input);
             }
             catch (_a) {
@@ -273,15 +274,20 @@ var Workout;
                 editorTabButton.add('active');
             }
         }
-        function createDependencyGraph() {
-            setupGraphWithJSON({
-                nodes: ['a', 'b', 'c'],
-                edges: [
-                    ['a', 'b'],
-                    ['b', 'c'],
-                    ['c', 'a'],
-                ]
-            });
+        function createDependencyGraph(ast) {
+            const graphJSON = createGraphJSONBasedOnAST(ast);
+            setupGraphWithJSON(graphJSON);
+        }
+        function createGraphJSONBasedOnAST(ast) {
+            const nodes = ast.map(node => node.symbol);
+            const edges = [];
+            for (const node of ast)
+                for (const dependency of node.dependencies)
+                    edges.push([dependency, node.symbol]);
+            return {
+                nodes: nodes,
+                edges: edges
+            };
         }
     })(UI = Workout.UI || (Workout.UI = {}));
 })(Workout || (Workout = {}));

@@ -135,6 +135,7 @@ namespace Workout.UI {
 
                 renderDependencyLaTeX( computedResults.ast )
                 prettyPrintResults( computedResults.results )
+                createDependencyGraph( computedResults.ast )
 
                 localStorage.setItem( localStorageId, input )
 
@@ -268,15 +269,30 @@ namespace Workout.UI {
     // ─── CREATE GRAPH ───────────────────────────────────────────────────────────────
     //
 
-        function createDependencyGraph ( ) {
-            setupGraphWithJSON({
-                nodes: [ 'a', 'b', 'c' ],
-                edges: [
-                    [ 'a', 'b' ],
-                    [ 'b', 'c' ],
-                    [ 'c', 'a' ],
-                ]
-            })
+        function createDependencyGraph ( ast: AST ) {
+            const graphJSON =
+                createGraphJSONBasedOnAST( ast )
+
+            setupGraphWithJSON( graphJSON )
+        }
+
+    //
+    // ─── CREATE DEPENDENCY GRAPH JSON ───────────────────────────────────────────────
+    //
+
+        function createGraphJSONBasedOnAST ( ast: AST ): Springy.IGraphJSONInput {
+            const nodes =
+                ast.map( node => node.symbol )
+
+            const edges = []
+            for ( const node of ast )
+                for ( const dependency of node.dependencies )
+                    edges.push([ dependency, node.symbol ])
+
+            return {
+                nodes: nodes,
+                edges: edges
+            }
         }
 
     // ────────────────────────────────────────────────────────────────────────────────
