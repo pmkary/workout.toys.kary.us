@@ -171,10 +171,13 @@ var Workout;
         };
         function setupCanvasUpdateEvents() {
             const inputBox = document.getElementById('code-input');
-            inputBox.onchange = () => {
-                const { ast, results, input } = getLatestComputation();
-                createDependencyGraph(ast, results);
-            };
+            inputBox.onchange = () => (screen.width > 500
+                ? updateGraph
+                : null);
+        }
+        function updateGraph() {
+            const { ast, results, input } = getLatestComputation();
+            createDependencyGraph(ast, results);
         }
         function disableEvents() {
             const disable = (e) => e.preventDefault();
@@ -281,6 +284,8 @@ var Workout;
             const toBeDeActivatedTabButtonId = ((toBeActiveTabId === "input-container")
                 ? "results-tab-button"
                 : "editor-tab-button");
+            if (toBeActiveTabId !== "input-container")
+                updateGraph();
             document.getElementById(toBeActivatedTabButtonId)
                 .classList.add('active');
             document.getElementById(toBeDeActivatedTabButtonId)

@@ -68,12 +68,26 @@ namespace Workout.UI {
 
         function setupCanvasUpdateEvents ( ) {
             const inputBox = document.getElementById('code-input')!
-            inputBox.onchange = ( ) => {
-                const { ast, results, input } =
+
+            // on big screens
+            inputBox.onchange = ( ) =>
+                ( screen.width > 500
+                    ? updateGraph
+                    : null
+                    )
+
+            // on small screens
+        }
+
+    //
+    // ─── UPDATE GRAPH ───────────────────────────────────────────────────────────────
+    //
+
+        function updateGraph ( ) {
+            const { ast, results, input } =
                     getLatestComputation( )
 
-                createDependencyGraph( ast, results )
-            }
+            createDependencyGraph( ast, results )
         }
 
     //
@@ -285,6 +299,9 @@ namespace Workout.UI {
                     ? "results-tab-button"
                     : "editor-tab-button"
                     )
+
+            if ( toBeActiveTabId !== "input-container" )
+                updateGraph( )
 
             document.getElementById( toBeActivatedTabButtonId )!
                 .classList.add('active')
