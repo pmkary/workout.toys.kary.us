@@ -11,8 +11,8 @@ body {
     justify-content:        center;
     margin:                 auto;
     max-width:              700pt;
-    min-height:             100vh;
-    overflow-y:             hidden;
+    min-height:             fit-content;
+    padding-bottom:         20pt;
 }
 
 container {
@@ -78,6 +78,7 @@ textarea {
     flex-direction:     column;
     margin-right:       20pt;
     max-width:          100%;
+    outline:            none;
 }
 
 #monitor-view {
@@ -85,8 +86,9 @@ textarea {
 }
 
 #monitor-view-split-view {
-    align-items:    stretch;
-    display:        flex;
+    align-items:        stretch;
+    display:            flex;
+    margin-bottom:      5pt;
 }
 
 #monitor-view-split-view > div {
@@ -153,6 +155,10 @@ tool-title {
     text-transform:     uppercase;
 }
 
+#monitor-graph-view {
+    width:      calc( 100% - 40pt );
+}
+
 @media ( max-width: 740pt ) {
     body {
         margin:     20pt !important;
@@ -162,14 +168,8 @@ tool-title {
 @media ( max-width: 700px ) {
     body {
         justify-content:    flex-start;
-        max-height:         100vh;
         max-width:          calc( 100vw - 40pt ) !important;
-        min-height:         100vh;
-        overflow:           hidden;
-    }
-
-    body, html {
-        position:       fixed;
+        min-height:         fit-content;
     }
 
     #main-container {
@@ -199,5 +199,9 @@ tool-title {
 
     .katex {
         font-size:      1rem;
+    }
+
+    #monitor-graph-view {
+        width:      calc( 100vw - 80pt );
     }
 }

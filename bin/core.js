@@ -156,15 +156,39 @@ var Workout;
     (function (UI) {
         const localStorageId = 'us.kary.workout.code';
         window.onload = () => {
+            noBounce.init({
+                animated: true
+            });
             checkAndLoadCodeInLocalStorage();
-            document.body.ontouchmove = e => e.preventDefault();
             setupInputBoxEvents();
             setupTabBarEvents();
             setupWindowResizeEvent();
+            setupCanvasUpdateEvents();
+            disableEvents();
             onInputChange();
             configureWindowBasedOnScreenWidth();
-            createDependencyGraph();
+            setupGraphWithJSON();
         };
+        function setupCanvasUpdateEvents() {
+            const inputBox = document.getElementById('code-input');
+            inputBox.onchange = () => {
+                const { ast, results, input } = getLatestComputation();
+                createDependencyGraph(ast, results);
+            };
+        }
+        function disableEvents() {
+            const disable = (e) => e.preventDefault();
+            const graphCanvas = document.getElementById('monitor-graph-view');
+            const canvasDisableFunction = () => {
+                graphCanvas.ontouchmove = disable;
+                graphCanvas.onclick = disable;
+                graphCanvas.ondrag = disable;
+                graphCanvas.onmouseenter = disable;
+                graphCanvas.onmousemove = disable;
+                graphCanvas.onmouseover = disable;
+            };
+            setTimeout(canvasDisableFunction, 50);
+        }
         function setupInputBoxEvents() {
             const inputBox = document.getElementById('code-input');
             inputBox.onchange = onInputChange;
@@ -201,16 +225,24 @@ var Workout;
         }
         function onInputChange() {
             try {
-                const input = document.getElementById('code-input')
-                    .value;
-                const computedResults = Workout.compute(input);
-                renderDependencyLaTeX(computedResults.ast);
-                prettyPrintResults(computedResults.results);
-                createDependencyGraph(computedResults.ast);
+                const { ast, results, input } = getLatestComputation();
+                renderDependencyLaTeX(ast);
+                prettyPrintResults(results);
+                createDependencyGraph(ast, results);
                 localStorage.setItem(localStorageId, input);
             }
             catch (_a) {
             }
+        }
+        function getLatestComputation() {
+            const input = document.getElementById('code-input')
+                .value;
+            const computedResults = Workout.compute(input);
+            return {
+                input: input,
+                ast: computedResults.ast,
+                results: computedResults.results
+            };
         }
         function prettyPrintResults(results) {
             const resultsInLaTeX = Object.keys(results).map(key => results[key]
@@ -274,18 +306,30 @@ var Workout;
                 editorTabButton.add('active');
             }
         }
-        function createDependencyGraph(ast) {
-            const graphJSON = createGraphJSONBasedOnAST(ast);
+        function createDependencyGraph(ast, results) {
+            const graphJSON = createGraphJSONBasedOnAST(ast, results);
             setupGraphWithJSON(graphJSON);
         }
-        function createGraphJSONBasedOnAST(ast) {
-            const nodes = ast.map(node => node.symbol);
+        function createGraphJSONBasedOnAST(ast, results) {
+            const nodes = new Set();
+            for (const node of ast) {
+                nodes.add(node.symbol);
+                for (const dependency of node.dependencies)
+                    nodes.add(dependency);
+            }
+            const getEdgeColor = (dependency) => (results[dependency] !== undefined
+                ? '#00BE56'
+                : '#CE0101');
             const edges = [];
             for (const node of ast)
                 for (const dependency of node.dependencies)
-                    edges.push([dependency, node.symbol]);
+                    edges.push([
+                        dependency,
+                        node.symbol,
+                        { color: getEdgeColor(dependency) }
+                    ]);
             return {
-                nodes: nodes,
+                nodes: [...nodes],
                 edges: edges
             };
         }

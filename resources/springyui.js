@@ -80,49 +80,49 @@ jQuery.fn.springy = function(params) {
 	var nearest = null;
 	var dragged = null;
 
-	jQuery(canvas).mousedown(function(e) {
-		var pos = jQuery(this).offset();
-		var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
-		selected = nearest = dragged = layout.nearest(p);
+	// jQuery(canvas).mousedown(function(e) {
+	// 	var pos = jQuery(this).offset();
+	// 	var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
+	// 	selected = nearest = dragged = layout.nearest(p);
 
-		if (selected.node !== null) {
-			dragged.point.m = 10000.0;
+	// 	if (selected.node !== null) {
+	// 		dragged.point.m = 10000.0;
 
-			if (nodeSelected) {
-				nodeSelected(selected.node);
-			}
-		}
+	// 		if (nodeSelected) {
+	// 			nodeSelected(selected.node);
+	// 		}
+	// 	}
 
-		renderer.start();
-	});
+	// 	renderer.start();
+	// });
 
 	// Basic double click handler
-	jQuery(canvas).dblclick(function(e) {
-		var pos = jQuery(this).offset();
-		var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
-		selected = layout.nearest(p);
-		node = selected.node;
-		if (node && node.data && node.data.ondoubleclick) {
-			node.data.ondoubleclick();
-		}
-	});
+	// jQuery(canvas).dblclick(function(e) {
+	// 	var pos = jQuery(this).offset();
+	// 	var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
+	// 	selected = layout.nearest(p);
+	// 	node = selected.node;
+	// 	if (node && node.data && node.data.ondoubleclick) {
+	// 		node.data.ondoubleclick();
+	// 	}
+	// });
 
-	jQuery(canvas).mousemove(function(e) {
-		var pos = jQuery(this).offset();
-		var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
-		nearest = layout.nearest(p);
+	// jQuery(canvas).mousemove(function(e) {
+	// 	var pos = jQuery(this).offset();
+	// 	var p = fromScreen({x: e.pageX - pos.left, y: e.pageY - pos.top});
+	// 	nearest = layout.nearest(p);
 
-		if (dragged !== null && dragged.node !== null) {
-			dragged.point.p.x = p.x;
-			dragged.point.p.y = p.y;
-		}
+	// 	if (dragged !== null && dragged.node !== null) {
+	// 		dragged.point.p.x = p.x;
+	// 		dragged.point.p.y = p.y;
+	// 	}
 
-		renderer.start();
-	});
+	// 	renderer.start();
+	// });
 
-	jQuery(window).bind('mouseup',function(e) {
-		dragged = null;
-	});
+	// jQuery(window).bind('mouseup',function(e) {
+	// 	dragged = null;
+	// });
 
 	var getTextWidth = function(node) {
 		var text = (node.data.label !== undefined) ? node.data.label : node.id;

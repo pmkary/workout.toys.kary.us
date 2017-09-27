@@ -11,12 +11,16 @@
 
     function setupGraphWithJSON ( graphJSON ) {
         jQuery(( ) => {
-            Workout.UI.GraphView = new Springy.Graph( )
-            Workout.UI.GraphView.loadJSON( graphJSON )
+            Workout.UI.GraphView =
+                new Springy.Graph( )
 
-            const springy = jQuery('#monitor-graph-view').springy({
-                graph: Workout.UI.GraphView
-            })
+            if ( graphJSON )
+                Workout.UI.GraphView.loadJSON( graphJSON )
+
+            const springy =
+                jQuery('#monitor-graph-view').springy({
+                    graph: Workout.UI.GraphView
+                })
         })
     }
 
