@@ -16,6 +16,9 @@
     <script src="resources/springy.js"></script>
     <script src="resources/springyui.js"></script>
 
+    <!-- no bounce effect -->
+    <script src="resources/noBounce.js"></script>
+
     <!-- workout core files -->
     <script src="bin/core.js"></script>
     <script src="js/helpers.js"></script>
@@ -61,12 +64,12 @@
                 </div>
 
                 <tool-title>Dependency Graph</tool-title>
-                <canvas id="monitor-graph-view" width="500" height="200" class="box"/>
+                <canvas id="monitor-graph-view" class="box"/>
             </div>
         </div>
     </container>
 
-    <div id="tab-bar">
+    <div id="tab-bar" class="hidden">
         <div class="tab active" id="editor-tab-button">
             <div class="tab-icon">&#xf129;</div>
             <div class="tab-caption">Equation Editor</div>
