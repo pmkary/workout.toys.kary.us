@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 3
+# 4
 
 # Offline cache v1
 # html files
@@ -8,6 +8,8 @@ index.html
 
 # resources
 resources/sheet.css
+
+resources/noBounce.js
 
 resources/katex.min.js
 resources/katex.min.css
