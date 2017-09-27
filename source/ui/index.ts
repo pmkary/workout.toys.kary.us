@@ -7,7 +7,7 @@
 
 /// <reference path="../core/index.ts" />
 
-declare function setupGraphWithJSON( graphJSON: Springy.IGraphJSONInput ): void
+declare function setupGraphWithJSON( graph?: Springy.IGraphJSONInput ): void
 
 
 namespace Workout.UI {
@@ -29,6 +29,7 @@ namespace Workout.UI {
         type Formula = Parser.IFormulaNode
         type Results = Octobass.IOctobassComputedDependencies<number>
         type AST = Formula[ ]
+        type GraphJSON = Springy.IGraphJSONInput
 
     //
     // ─── CONSTANTS ──────────────────────────────────────────────────────────────────
@@ -41,19 +42,63 @@ namespace Workout.UI {
     //
 
         window.onload = ( ) => {
+            noBounce.init({
+                animated: true
+            })
+
             // loading
             checkAndLoadCodeInLocalStorage( )
-            document.body.ontouchmove = e => e.preventDefault( )
 
             // event setups
             setupInputBoxEvents( )
             setupTabBarEvents( )
             setupWindowResizeEvent( )
+            setupCanvasUpdateEvents( )
+            disableEvents( )
 
             // do first render stuff
             onInputChange( )
             configureWindowBasedOnScreenWidth( )
-            createDependencyGraph( )
+            setupGraphWithJSON( )
+        }
+
+    //
+    // ─── SETUP CANVAS UPDATE EVENTS ─────────────────────────────────────────────────
+    //
+
+        function setupCanvasUpdateEvents ( ) {
+            const inputBox = document.getElementById('code-input')!
+            inputBox.onchange = ( ) => {
+                const { ast, results, input } =
+                    getLatestComputation( )
+
+                createDependencyGraph( ast, results )
+            }
+        }
+
+    //
+    // ─── DISABLE TOUCH EVENTS ───────────────────────────────────────────────────────
+    //
+
+        function disableEvents ( ) {
+            const disable = ( e: Event ) =>
+                e.preventDefault( )
+
+            // document.body.ontouchmove = disable
+
+            const graphCanvas =
+                ( document.getElementById('monitor-graph-view')! as HTMLCanvasElement )
+
+            const canvasDisableFunction = ( ) => {
+                graphCanvas.ontouchmove  = disable
+                graphCanvas.onclick      = disable
+                graphCanvas.ondrag       = disable
+                graphCanvas.onmouseenter = disable
+                graphCanvas.onmousemove  = disable
+                graphCanvas.onmouseover  = disable
+            }
+
+            setTimeout( canvasDisableFunction , 50)
         }
 
     //
@@ -126,21 +171,36 @@ namespace Workout.UI {
 
         function onInputChange ( ) {
             try {
-                const input =
-                    ( document.getElementById('code-input') as HTMLTextAreaElement )!
-                    .value
+                const { ast, results, input } =
+                    getLatestComputation( )
 
-                const computedResults =
-                    Workout.compute( input )
-
-                renderDependencyLaTeX( computedResults.ast )
-                prettyPrintResults( computedResults.results )
-                createDependencyGraph( computedResults.ast )
+                renderDependencyLaTeX( ast )
+                prettyPrintResults( results )
+                createDependencyGraph( ast, results )
 
                 localStorage.setItem( localStorageId, input )
 
             } catch {
                 // who cares...
+            }
+        }
+
+    //
+    // ─── GET COMPUTATION ────────────────────────────────────────────────────────────
+    //
+
+        function getLatestComputation ( ) {
+            const input =
+                ( document.getElementById('code-input') as HTMLTextAreaElement )!
+                .value
+
+            const computedResults =
+                Workout.compute( input )
+
+            return {
+                input:      input,
+                ast:        computedResults.ast,
+                results:    computedResults.results
             }
         }
 
@@ -269,9 +329,9 @@ namespace Workout.UI {
     // ─── CREATE GRAPH ───────────────────────────────────────────────────────────────
     //
 
-        function createDependencyGraph ( ast: AST ) {
+        function createDependencyGraph ( ast: AST, results: Results ) {
             const graphJSON =
-                createGraphJSONBasedOnAST( ast )
+                createGraphJSONBasedOnAST( ast, results )
 
             setupGraphWithJSON( graphJSON )
         }
@@ -280,17 +340,31 @@ namespace Workout.UI {
     // ─── CREATE DEPENDENCY GRAPH JSON ───────────────────────────────────────────────
     //
 
-        function createGraphJSONBasedOnAST ( ast: AST ): Springy.IGraphJSONInput {
-            const nodes =
-                ast.map( node => node.symbol )
+        function createGraphJSONBasedOnAST ( ast: AST, results: Results ): GraphJSON {
+            const nodes = new Set<string>( )
+            for ( const node of ast ) {
+                nodes.add( node.symbol )
+                for ( const dependency of node.dependencies )
+                    nodes.add( dependency )
+            }
 
-            const edges = []
+            const getEdgeColor = ( dependency: string ) =>
+                    ( results[ dependency ] !== undefined
+                        ? '#00BE56' // green
+                        : '#CE0101' // red
+                        )
+
+            const edges = [ ]
             for ( const node of ast )
                 for ( const dependency of node.dependencies )
-                    edges.push([ dependency, node.symbol ])
+                    edges.push([
+                        dependency,
+                        node.symbol,
+                        { color: getEdgeColor( dependency ) }
+                    ])
 
             return {
-                nodes: nodes,
+                nodes: [ ...nodes ],
                 edges: edges
             }
         }
