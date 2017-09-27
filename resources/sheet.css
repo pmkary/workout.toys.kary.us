@@ -10,7 +10,7 @@ body {
     background-color:       white;
     justify-content:        center;
     margin:                 auto;
-    max-width:              500pt;
+    max-width:              700pt;
     min-height:             100vh;
     overflow-y:             hidden;
 }
@@ -25,16 +25,15 @@ container {
 }
 
 #katex-display {
-    flex:               auto;
-    max-width:          fit-content;
+    flex:               1;
+    min-width:          fit-content;
     padding-bottom:     5pt;
     padding-top:        5pt;
 }
 
 #results {
-    flex:               auto;
+    flex:               1;
     margin-right:       20pt;
-    max-width:          fit-content;
     min-width:          fit-content;
     padding-top:        5pt;
 }
@@ -75,28 +74,34 @@ textarea {
 #input-container {
     align-items:        stretch;
     display:            flex;
+    flex:               1;
     flex-direction:     column;
     margin-right:       20pt;
+    max-width:          100%;
 }
 
 #monitor-view {
+    align-items:    stretch;
     display:        flex;
-    max-width:      fit-content;
+    flex:           1;
 }
 
 #monitor-view > div {
+    align-content:      stretch;
     align-items:        stretch;
+    align-self:         stretch;
     display:            flex;
+    flex:               1;
     flex-direction:     column;
 }
 
 #tab-bar {
+    height:                 fit-content;
     display:                flex;
-    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    height:                 fit-content;
+    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
@@ -145,10 +150,15 @@ tool-title {
     text-transform:     uppercase;
 }
 
+@media ( max-width: 740pt ) {
+    body {
+        margin:     20pt !important;
+    }
+}
+
 @media ( max-width: 700px ) {
     body {
         justify-content:    flex-start;
-        margin:             20pt !important;
         max-height:         100vh;
         max-width:          calc( 100vw - 40pt ) !important;
         min-height:         100vh;
