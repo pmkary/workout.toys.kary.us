@@ -7,7 +7,16 @@
 
 /// <reference path="../core/index.ts" />
 
+declare function setupGraphWithJSON( graphJSON: Springy.IGraphJSONInput ): void
+
+
 namespace Workout.UI {
+
+    //
+    // ─── GLOBALS ────────────────────────────────────────────────────────────────────
+    //
+
+        export let GraphView: Springy.Graph
 
     //
     // ─── HELPING DECELERATIONS ──────────────────────────────────────────────────────
@@ -44,6 +53,7 @@ namespace Workout.UI {
             // do first render stuff
             onInputChange( )
             configureWindowBasedOnScreenWidth( )
+            createDependencyGraph( )
         }
 
     //
@@ -252,6 +262,21 @@ namespace Workout.UI {
                 resultsView.add('hidden')
                 editorTabButton.add('active')
             }
+        }
+
+    //
+    // ─── CREATE GRAPH ───────────────────────────────────────────────────────────────
+    //
+
+        function createDependencyGraph ( ) {
+            setupGraphWithJSON({
+                nodes: [ 'a', 'b', 'c' ],
+                edges: [
+                    [ 'a', 'b' ],
+                    [ 'b', 'c' ],
+                    [ 'c', 'a' ],
+                ]
+            })
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

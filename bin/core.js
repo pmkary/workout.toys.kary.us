@@ -163,6 +163,7 @@ var Workout;
             setupWindowResizeEvent();
             onInputChange();
             configureWindowBasedOnScreenWidth();
+            createDependencyGraph();
         };
         function setupInputBoxEvents() {
             const inputBox = document.getElementById('code-input');
@@ -271,6 +272,16 @@ var Workout;
                 resultsView.add('hidden');
                 editorTabButton.add('active');
             }
+        }
+        function createDependencyGraph() {
+            setupGraphWithJSON({
+                nodes: ['a', 'b', 'c'],
+                edges: [
+                    ['a', 'b'],
+                    ['b', 'c'],
+                    ['c', 'a'],
+                ]
+            });
         }
     })(UI = Workout.UI || (Workout.UI = {}));
 })(Workout || (Workout = {}));

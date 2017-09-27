@@ -35,9 +35,17 @@ declare namespace Springy {
     //
 
         export class Graph {
+
             newNode ( options: IGraphNewNodeOptions ): Node
+
+            addNodes( ...nodeNames: string[ ] ): void
+
             newEdge ( start: Node, end: Node, options?: IGraphNewEdgeOptions ): void
+
+            addEdges( ...edges: string[ ][ ] ): void
+
             loadJSON( jsonInput: IGraphJSONInput ): void
+
         }
 
     // ────────────────────────────────────────────────────────────────────────────────

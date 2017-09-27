@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# 1
+# 2
 
 # Offline cache v1
 # html files
@@ -11,6 +11,10 @@ resources/sheet.css
 
 resources/katex.min.js
 resources/katex.min.css
+
+resources/jquery.min.js
+resources/springy.js
+resources/springyui.js
 
 resources/fonts/KaTeX_Main-Regular.woff2
 resources/fonts/KaTeX_Math-Italic.woff2
@@ -26,3 +30,4 @@ resources/flaticon/Flaticon.woff
 
 # js files
 bin/core.js
+js/helpers.js

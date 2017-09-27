@@ -81,12 +81,15 @@ textarea {
 }
 
 #monitor-view {
-    align-items:    stretch;
-    display:        flex;
-    flex:           1;
+    flex:       1;
 }
 
-#monitor-view > div {
+#monitor-view-split-view {
+    align-items:    stretch;
+    display:        flex;
+}
+
+#monitor-view-split-view > div {
     align-content:      stretch;
     align-items:        stretch;
     align-self:         stretch;
@@ -96,12 +99,12 @@ textarea {
 }
 
 #tab-bar {
-    height:                 fit-content;
     display:                flex;
+    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    border-top:             1px rgba( 0, 0, 0, 0.1) solid;
+    height:                 fit-content;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
