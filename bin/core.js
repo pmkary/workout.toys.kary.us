@@ -312,7 +312,13 @@ var Workout;
             }
         }
         function createDependencyGraph(ast, results) {
+            const graphViewCanvas = document.getElementById('monitor-graph-view');
             const graphJSON = createGraphJSONBasedOnAST(ast, results);
+            const graphViewHeight = (graphJSON.nodes.length * 30).toString();
+            graphViewCanvas.setAttribute('width', graphViewCanvas.clientWidth.toString());
+            graphViewCanvas.setAttribute('height', graphViewHeight);
+            graphViewCanvas.style.height =
+                graphViewHeight;
             setupGraphWithJSON(graphJSON);
         }
         function createGraphJSONBasedOnAST(ast, results) {

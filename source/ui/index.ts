@@ -347,8 +347,19 @@ namespace Workout.UI {
     //
 
         function createDependencyGraph ( ast: AST, results: Results ) {
+            const graphViewCanvas =
+                document.getElementById('monitor-graph-view')! as HTMLCanvasElement
             const graphJSON =
                 createGraphJSONBasedOnAST( ast, results )
+            const graphViewHeight =
+                ( graphJSON.nodes.length * 30 ).toString( )
+
+            graphViewCanvas.setAttribute( 'width',
+                graphViewCanvas.clientWidth.toString( ) )
+            graphViewCanvas.setAttribute( 'height',
+                graphViewHeight )
+            graphViewCanvas.style.height =
+                graphViewHeight
 
             setupGraphWithJSON( graphJSON )
         }
