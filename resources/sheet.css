@@ -12,7 +12,7 @@ body {
     margin:                 auto;
     max-width:              700pt;
     min-height:             fit-content;
-    padding-bottom:         20pt;
+    padding-bottom:         52px;
 }
 
 container {
@@ -102,12 +102,12 @@ textarea {
 }
 
 #tab-bar {
-    display:                flex;
     border-top:             1px rgba( 0, 0, 0, 0.1) solid;
+    height:                 fit-content;
     background-color:       rgba( 255, 255, 255, 0.95);
     bottom:                 0;
     box-sizing:             border-box;
-    height:                 fit-content;
+    display:                flex;
     justify-content:        space-around;
     left:                   0;
     position:               fixed;
@@ -136,7 +136,7 @@ textarea {
 
 .tab-caption {
     font-size:      8pt;
-    margin-top:     4pt;
+    margin-top:     7pt;
 }
 
 .hidden {
