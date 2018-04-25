@@ -8,9 +8,12 @@
     "words": [
         "Flaticon",
         "IAST",
-        "UMINUS",
+        "Kary",
+        "Octobass",
         "overbrace",
+        "Pouya",
         "prec",
+        "UMINUS",
         "yytext"
     ],
     // flagWords - list of words to be always considered incorrect
